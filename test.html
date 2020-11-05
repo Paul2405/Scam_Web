@@ -1,72 +1,52 @@
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+﻿<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 <style>
-    th{ 
-        color:#fff;
-            }
+    span {
+        display: inline-block;
+        position: relative;
+        width: 1.2em;
+        height: 1.2em;
+        color: black;
+    }
+
+    .high {
+        color: rgb(27, 211, 0);
+        
+    }
+
 </style>
 
+<div class="banner-section" id="img-container" onload="">
 
-<table class="table table-striped">
-    <tr  class="bg-info">
-		<th>Id</th>
-		<th>Name</th>
-		<th>CatID</th>
-		<th>Status</th>
-    </tr>
+</div>
 
-    <tbody id="myTable">
-        
-    </tbody>
-</table>
 
 <script>
-	var myArray = []
-	
+    $.ajax({
+        method: 'GET',
+        url: 'https://scam2020.azurewebsites.net/api/Products/3',
+        success: function (response) {
+            buildRating(response);
+        }
+    })
 
-	$.ajax({
-		method:'GET',
-        url:'https://scam2020.azurewebsites.net/api/Categories',
-		success:function(response){
-			myArray = response.data
-			buildTable(myArray)
-			console.log(myArray)
-		}
-	})
+    function buildRating(data) {
+        
+        createRatingElement(data.rating);
+        
+    }
 
-
-
-	function buildTable(obj, data) {
-		
-		var table = document.getElementById('myTable');
-		if (this.data !== undefined) {
-            return true;
-			for (var i = 0; i < data.length; i++) {
-
-				var row = `<tr>
-							<td>${data[i].id}</td>
-							<td>${data[i].name}</td>
-							<td>${data[i].categoryId}</td>
-							<td>${data[i].status}</td>
-							<td>${data[i].productCategories}</td>
-							
-					  </tr>`
-                table.innerHTML += row
-			}	
-			} else {
-				return false;
-				
-            
-            
-
-			
-
-
-
-			}
-		
-	}
+    function createRatingElement(numberOfStars) {
+        var wrapper = document.createElement('div');
+        for (var i = 1; i <= 5; i++) {
+            var span = document.createElement('span')
+            span.innerHTML = (i <= numberOfStars ? '★' : '☆');
+            span.className = (i <= numberOfStars ? 'high' : '');
+            wrapper.appendChild(span);
+        }
+        document.getElementById('img-container').appendChild(wrapper);
+    }
 
 </script>
